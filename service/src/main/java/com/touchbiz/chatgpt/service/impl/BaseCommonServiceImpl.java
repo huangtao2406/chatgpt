@@ -2,10 +2,9 @@ package com.touchbiz.chatgpt.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.touchbiz.chatgpt.common.dto.LogDTO;
-import com.touchbiz.chatgpt.database.domain.SysUser;
 import com.touchbiz.chatgpt.database.mapper.BaseCommonMapper;
 import com.touchbiz.chatgpt.dto.response.LoginUser;
-import com.touchbiz.chatgpt.infrastructure.utils.IpUtils;
+import com.touchbiz.chatgpt.infrastructure.utils.RequestUtils;
 import com.touchbiz.chatgpt.infrastructure.utils.SpringContextUtils;
 import com.touchbiz.chatgpt.service.BaseCommonService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +38,7 @@ public class BaseCommonServiceImpl implements BaseCommonService {
             //获取request
             HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
             //设置IP地址
-            sysLog.setIp(IpUtils.getIpAddr(request));
+            sysLog.setIp(RequestUtils.getIpAddr(request));
         } catch (Exception e) {
             sysLog.setIp("127.0.0.1");
         }

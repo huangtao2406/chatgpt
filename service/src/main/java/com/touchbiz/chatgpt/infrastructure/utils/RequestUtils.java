@@ -1,11 +1,18 @@
 package com.touchbiz.chatgpt.infrastructure.utils;
 
+
+import com.touchbiz.common.entity.exception.BizException;
 import com.touchbiz.common.utils.text.CommonConstant;
+import com.touchbiz.common.utils.text.oConvertUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * IP地址
@@ -16,8 +23,9 @@ import javax.servlet.http.HttpServletRequest;
  * @email jeecgos@163.com
  * @Date 2019年01月14日
  */
-public class IpUtils {
-	private static Logger logger = LoggerFactory.getLogger(IpUtils.class);
+@Slf4j
+public class RequestUtils {
+	private static Logger logger = LoggerFactory.getLogger(RequestUtils.class);
 
 	/**
 	 * 获取IP地址
@@ -56,6 +64,27 @@ public class IpUtils {
 //		}
         
         return ip;
+    }
+
+    public static String getToken(HttpServletRequest request) {
+        String token = request.getHeader(com.touchbiz.chatgpt.infrastructure.constants.CommonConstant.X_ACCESS_TOKEN);
+        if(oConvertUtils.isEmpty(token)) {
+            throw new BizException("用户token失效，请联系管理员");
+        }
+        return token;
+    }
+
+    public static Map<String, Object> getHeads(HttpServletRequest request){
+        Map<String, Object> stringObjectHashMap = new HashMap<>();
+        Enumeration<String> headers = request.getHeaderNames();
+        log.info("请求头信息");
+        while(headers.hasMoreElements()){
+            String headName = headers.nextElement();
+            String headValue = request.getHeader(headName);
+            log.info(headName+"："+headValue);
+            stringObjectHashMap.put(headName,headValue);
+        }
+        return stringObjectHashMap;
     }
 	
 }
